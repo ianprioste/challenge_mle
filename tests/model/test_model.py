@@ -3,7 +3,10 @@ import pandas as pd
 
 from sklearn.metrics import classification_report
 from sklearn.model_selection import train_test_split
-from challenge.model import DelayModel
+import sys
+import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../challenge')))
+from model import DelayModel
 
 class TestModel(unittest.TestCase):
 
@@ -28,7 +31,7 @@ class TestModel(unittest.TestCase):
     def setUp(self) -> None:
         super().setUp()
         self.model = DelayModel()
-        self.data = pd.read_csv(filepath_or_buffer="../data/data.csv")
+        self.data = pd.read_csv(filepath_or_buffer="data/data.csv")
         
 
     def test_model_preprocess_for_training(
@@ -101,3 +104,7 @@ class TestModel(unittest.TestCase):
         assert isinstance(predicted_targets, list)
         assert len(predicted_targets) == features.shape[0]
         assert all(isinstance(predicted_target, int) for predicted_target in predicted_targets)
+        assert all(predicted_target in [0, 1] for predicted_target in predicted_targets)    
+
+if __name__ == "__main__":
+    unittest.main(exit=False)
